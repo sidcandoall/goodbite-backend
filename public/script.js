@@ -1,4 +1,4 @@
-const API = "REPLACE_WITH_RENDER_BACKEND_URL/api";
+const API = "https://goodbite-backend.onrender.com/api";
 
 const IMAGES = {
   1: "images/1.png",
