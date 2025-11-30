@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Add Review</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="javascript:history.back()" class="nav-link">← Back</a>
+</nav>
+
+<h2 class="page-title">Add Review</h2>
+
+<form id="reviewForm" class="review-form">
+  <input id="name" placeholder="Your name" required class="input">
+  
+  <select id="rating" class="input">
+    <option value="1">1 Star</option>
+    <option value="2">2 Stars</option>
+    <option value="3">3 Stars</option>
+    <option value="4">4 Stars</option>
+    <option value="5">5 Stars</option>
+  </select>
+  
+  <textarea id="comment" placeholder="Your review..." required class="input"></textarea>
+  
+  <button class="btn">Submit</button>
+</form>
+
+<script src="script.js"></script>
+
+<footer>© 2025 GoodBite</footer>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurants</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-link">GoodBite</a>
+</nav>
+
+<h2 class="page-title">Restaurants</h2>
+
+<div class="search-bar">
+  <input id="searchBox" class="input" placeholder="Search restaurants...">
+
+  <select id="cuisineFilter" class="input">
+    <option value="all">All Cuisines</option>
+    <option value="Indian">Indian</option>
+    <option value="Italian">Italian</option>
+    <option value="Japanese">Japanese</option>
+    <option value="Mexican">Mexican</option>
+    <option value="Pizza">Pizza</option>
+    <option value="Deli">Deli</option>
+    <option value="Fast Food">Fast Food</option>
+    <option value="Middle Eastern">Middle Eastern</option>
+  </select>
+
+  <select id="sortBy" class="input">
+    <option value="name">Sort by Name</option>
+    <option value="rating">Sort by Rating</option>
+  </select>
+</div>
+
+<div id="restaurant-list" class="grid"></div>
+<div id="pagination" class="pagination"></div>
+
+<script src="script.js"></script>
+
+<footer>© 2025 GoodBite</footer>
+
+</body>
+</html>

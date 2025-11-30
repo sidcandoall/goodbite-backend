@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Restaurant</title>
+<link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="restaurants.html" class="nav-link">← Back</a>
+</nav>
+
+<div class="page-container">
+
+  <div id="restaurant-details"></div>
+
+  <h3 class="section-title">Reviews</h3>
+  <div id="reviews" class="grid"></div>
+
+  <a id="addReviewBtn" class="btn write-review-btn">Write a Review</a>
+
+</div>
+
+<script>
+const p = new URLSearchParams(location.search);
+document.getElementById("addReviewBtn").href = "add-review.html?id=" + p.get("id");
+</script>
+
+<script src="script.js"></script>
+
+<footer>© 2025 GoodBite</footer>
+
+</body>
+</html>
