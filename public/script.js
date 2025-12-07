@@ -1,4 +1,4 @@
-const API = "https://goodbite-backend.onrender.com/api";
+const API = "http://localhost:3000/api";
 
 const IMAGES = {
   1: "images/1.png",
