@@ -1,45 +1,622 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<title>Restaurants</title>
-<link rel="stylesheet" href="styles.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Menu</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    :root {
+      --primary: #e74c3c;
+      --secondary: #2c3e50;
+      --accent: #f39c12;
+      --light: #ecf0f1;
+      --dark: #34495e;
+      --success: #27ae60;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      height: 260px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.65));
+    }
+
+    .hero-content {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      color: white;
+    }
+
+    .rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.35rem 0.75rem;
+      border-radius: 30px;
+      font-weight: 600;
+    }
+
+    .rating .star-rating {
+      display: inline-flex;
+      gap: 0.15rem;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    .content {
+      padding: 1.5rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 0.75rem 0;
+      color: #7f8c8d;
+    }
+
+    .meta i {
+      margin-right: 0.4rem;
+      color: var(--primary);
+    }
+
+    .menu-section {
+      margin-top: 1.5rem;
+    }
+
+    .menu-nav {
+      position: sticky;
+      top: 0.75rem;
+      z-index: 10;
+      background: white;
+      padding: 0.75rem 0;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .menu-pill {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #dfe4ea;
+      background: #f6f8fa;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, border 0.2s, color 0.2s;
+    }
+
+    .menu-pill:hover {
+      background: #e9ecef;
+      border-color: #cfd6dd;
+    }
+
+    .menu-pill.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .menu-category {
+      margin-bottom: 1.2rem;
+    }
+
+    .menu-category h3 {
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item h4 {
+      margin-bottom: 0.2rem;
+      color: var(--dark);
+    }
+
+    .menu-item p {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+    }
+
+    .diet-tags {
+      display: inline-flex;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+      margin-top: 0.15rem;
+    }
+
+    .diet-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #0f5132;
+      background: #e9f7ef;
+      border: 1px solid #c9e7d3;
+    }
+
+    .price {
+      color: var(--success);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: var(--secondary);
+      text-decoration: none;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 2rem;
+      color: #7f8c8d;
+    }
+
+    .reviews {
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      padding-top: 1.25rem;
+    }
+
+    .review-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f1f1f1;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .review-meta .stars {
+      color: var(--accent);
+    }
+
+    .review-item p {
+      margin-top: 0.35rem;
+      color: #4d4d4d;
+    }
+
+    .review-form {
+      margin-top: 1.5rem;
+      padding: 1.1rem;
+      background: #f9fbfc;
+      border-radius: 8px;
+      border: 1px solid #eef1f4;
+    }
+
+    .form-group {
+      margin-bottom: 0.9rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #dfe6ed;
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .submit-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #c0392b;
+    }
+
+    .muted {
+      color: #7f8c8d;
+    }
+
+    .star-input {
+      display: inline-flex;
+      gap: 0.3rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #d1d5db;
+    }
+
+    .star-input .active {
+      color: var(--accent);
+    }
+
+    .diet-filter {
+      margin: 1rem 0 0.5rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .diet-filter button {
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid #dfe4ea;
+      background: #f6f8fa;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s, border 0.2s;
+    }
+
+    .diet-filter button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Back to restaurants</a>
+    <div id="content" class="card">
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Loading menu...
+      </div>
+    </div>
+  </div>
 
-<nav class="navbar">
-  <a href="index.html" class="nav-link">GoodBite</a>
-</nav>
+  <script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+    const params = new URLSearchParams(window.location.search);
+    const restaurantId = params.get('id');
+    const content = document.getElementById('content');
+    let activeRestaurantId = null;
+    let dietFilter = 'all'; // all | vegan | vegetarian | gluten-free | spicy
 
-<h2 class="page-title">Restaurants</h2>
+    function renderReviewList(reviews = []) {
+      if (!reviews.length) {
+        return '<p class="muted">No reviews yet. Be the first to leave one!</p>';
+      }
+      return reviews.map(r => `
+        <div class="review-item">
+          <div class="review-meta">
+            <span><i class="fas fa-user"></i> ${r.name || 'Anonymous'}</span>
+            <span class="stars">${'★'.repeat(Math.round(r.rating || 0))}</span>
+            <span class="muted">${new Date(r.createdAt || Date.now()).toLocaleDateString()}</span>
+          </div>
+          <p>${r.comment || ''}</p>
+        </div>
+      `).join('');
+    }
 
-<div class="search-bar">
-  <input id="searchBox" class="input" placeholder="Search restaurants...">
+    function renderRestaurant(restaurant) {
+      activeRestaurantId = restaurant._id || null;
+      const image = restaurant.image && restaurant.image.trim() ? restaurant.image : 'images/1.png';
+      const menuHTML = (restaurant.menu && restaurant.menu.length)
+        ? restaurant.menu.map((category, idx) => `
+          <div class="menu-category" id="section-${idx}">
+            <h3><i class="fas fa-utensils"></i> ${category.category}</h3>
+            ${category.items
+              .filter(item => {
+                if (dietFilter === 'all') return true;
+                const tags = (item.dietary || []).map(t => t.toLowerCase());
+                return tags.includes(dietFilter);
+              })
+              .map(item => {
+                const tags = (item.dietary || []).map(t => t.toLowerCase());
+                const tagHtml = tags.length ? `<div class="diet-tags">${tags.map(t => `<span class="diet-tag">${t}</span>`).join('')}</div>` : '';
+                return `
+              <div class="menu-item">
+                <div>
+                  <h4>${item.name}</h4>
+                  <p>${item.description || ''}</p>
+                  ${tagHtml}
+                </div>
+                <div class="price">$${item.price?.toFixed ? item.price.toFixed(2) : item.price || ''}</div>
+              </div>
+            `;
+              }).join('')}
+          </div>
+        `).join('')
+        : '<p class="error">No menu data available for this restaurant.</p>';
 
-  <select id="cuisineFilter" class="input">
-    <option value="all">All Cuisines</option>
-    <option value="Indian">Indian</option>
-    <option value="Italian">Italian</option>
-    <option value="Japanese">Japanese</option>
-    <option value="Mexican">Mexican</option>
-    <option value="Pizza">Pizza</option>
-    <option value="Deli">Deli</option>
-    <option value="Fast Food">Fast Food</option>
-    <option value="Middle Eastern">Middle Eastern</option>
-  </select>
+      const menuNav = (restaurant.menu && restaurant.menu.length)
+        ? `
+        <div class="menu-nav">
+          ${restaurant.menu.map((category, idx) => `<button class="menu-pill" data-target="section-${idx}">${category.category}</button>`).join('')}
+        </div>
+        `
+        : '';
 
-  <select id="sortBy" class="input">
-    <option value="name">Sort by Name</option>
-    <option value="rating">Sort by Rating</option>
-  </select>
-</div>
+      const renderStars = (rating = 0) => {
+        const full = Math.floor(rating);
+        const half = rating - full >= 0.5;
+        const icons = [];
+        for (let i = 0; i < 5; i++) {
+          if (i < full) icons.push('<i class="fas fa-star"></i>');
+          else if (i === full && half) icons.push('<i class="fas fa-star-half-alt"></i>');
+          else icons.push('<i class="far fa-star"></i>');
+        }
+        return `<span class="star-rating">${icons.join('')}</span>`;
+      };
 
-<div id="restaurant-list" class="grid"></div>
-<div id="pagination" class="pagination"></div>
+      content.innerHTML = `
+        <div class="hero" style="background-image: url('${image}')">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <div class="rating">${renderStars(restaurant.rating || 0)} ${restaurant.rating || '—'}</div>
+            <h1>${restaurant.name}</h1>
+          </div>
+        </div>
+        <div class="content">
+          <div class="meta">
+            <span><i class="fas fa-utensils"></i>${restaurant.cuisine || 'Cuisine'}</span>
+            <span><i class="fas fa-map-marker-alt"></i>${restaurant.location || 'Location'}</span>
+            <span><i class="fas fa-tag"></i>${restaurant.price || ''}</span>
+          </div>
+          <p>${restaurant.description || ''}</p>
+          ${(restaurant.menu && restaurant.menu.length) ? `
+          <div class="diet-filter">
+            <span class="muted">Filter dietary:</span>
+            <button class="diet-btn ${dietFilter === 'all' ? 'active' : ''}" data-diet="all">All</button>
+            <button class="diet-btn ${dietFilter === 'vegan' ? 'active' : ''}" data-diet="vegan">Vegan</button>
+            <button class="diet-btn ${dietFilter === 'vegetarian' ? 'active' : ''}" data-diet="vegetarian">Vegetarian</button>
+            <button class="diet-btn ${dietFilter === 'gluten-free' ? 'active' : ''}" data-diet="gluten-free">Gluten-free</button>
+            <button class="diet-btn ${dietFilter === 'spicy' ? 'active' : ''}" data-diet="spicy">Spicy</button>
+          </div>
+          ` : ''}
+          ${menuNav}
+          <div class="menu-section">
+            <h2>Menu</h2>
+            ${menuHTML}
+          </div>
+          <div class="reviews">
+            <h2>Reviews</h2>
+            <div id="reviewsList">
+              ${renderReviewList(restaurant.reviews)}
+            </div>
+            ${restaurant._id ? `
+            <div class="review-form">
+              <h3>Leave a review</h3>
+              <form id="reviewForm">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" id="name" name="name" placeholder="Your name (optional)">
+                </div>
+                <div class="form-group">
+                  <label>Rating</label>
+                  <div class="star-input" id="ratingStars" role="radiogroup" aria-label="Rating">
+                    <i class="far fa-star" data-value="1"></i>
+                    <i class="far fa-star" data-value="2"></i>
+                    <i class="far fa-star" data-value="3"></i>
+                    <i class="far fa-star" data-value="4"></i>
+                    <i class="far fa-star" data-value="5"></i>
+                  </div>
+                  <input type="hidden" id="rating" name="rating" required>
+                </div>
+                <div class="form-group">
+                  <label for="comment">Comment</label>
+                  <textarea id="comment" name="comment" placeholder="Share your experience" required></textarea>
+                </div>
+                <button class="submit-btn" type="submit">Submit review</button>
+              </form>
+            </div>
+            ` : `<div class="error">Reviews are available only for restaurants loaded from the database.</div>`}
+          </div>
+        </div>
+      `;
 
-<script src="script.js"></script>
+      attachReviewHandler();
+      attachMenuNav();
+      attachDietFilter(restaurant);
+      wireStarInput();
+    }
 
-<footer>© 2025 GoodBite</footer>
+    function attachReviewHandler() {
+      const form = document.getElementById('reviewForm');
+      if (!form || !activeRestaurantId) return;
 
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const payload = {
+          name: formData.get('name') || 'Anonymous',
+          rating: Number(formData.get('rating')),
+          comment: formData.get('comment')
+        };
+
+        if (!payload.rating) {
+          alert('Please select a star rating.');
+          return;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+
+        try {
+          const res = await fetch(`${API_BASE_URL}/restaurants/${activeRestaurantId}/reviews`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) {
+            throw new Error('Failed to submit review');
+          }
+          await loadRestaurant();
+        } catch (err) {
+          alert('Could not submit review. Please try again.');
+          console.error(err);
+        } finally {
+          submitBtn.disabled = false;
+          form.reset();
+        }
+      });
+    }
+
+    function attachMenuNav() {
+      const navButtons = document.querySelectorAll('.menu-pill');
+      if (!navButtons.length) return;
+
+      navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.target;
+          const el = document.getElementById(target);
+          if (el) {
+            navButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    }
+
+    function attachDietFilter(restaurant) {
+      const dietButtons = document.querySelectorAll('.diet-btn');
+      if (!dietButtons.length) return;
+
+      dietButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          dietButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          dietFilter = btn.dataset.diet;
+          renderRestaurant(restaurant);
+        });
+      });
+    }
+
+    function wireStarInput() {
+      const stars = document.querySelectorAll('#ratingStars i');
+      const ratingInput = document.getElementById('rating');
+      if (!stars.length || !ratingInput) return;
+
+      const setStars = (value) => {
+        stars.forEach(star => {
+          const v = Number(star.dataset.value);
+          star.classList.toggle('active', v <= value);
+          star.classList.toggle('fas', v <= value);
+          star.classList.toggle('far', v > value);
+        });
+      };
+
+      stars.forEach(star => {
+        star.addEventListener('click', () => {
+          const value = Number(star.dataset.value);
+          ratingInput.value = value;
+          setStars(value);
+        });
+      });
+    }
+
+    async function loadRestaurant() {
+      const stored = localStorage.getItem('selectedRestaurant');
+      const fallback = stored ? JSON.parse(stored) : null;
+
+      if (!restaurantId && fallback) {
+        renderRestaurant(fallback);
+        return;
+      }
+
+      if (!restaurantId) {
+        content.innerHTML = '<div class="error">No restaurant selected.</div>';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/restaurants/${restaurantId}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch');
+        }
+        const restaurant = await res.json();
+        renderRestaurant(restaurant);
+      } catch (err) {
+        if (fallback) {
+          renderRestaurant(fallback);
+        } else {
+          content.innerHTML = '<div class="error">Unable to load restaurant details. Please try again.</div>';
+        }
+      }
+    }
+
+    loadRestaurant();
+  </script>
 </body>
+
 </html>
